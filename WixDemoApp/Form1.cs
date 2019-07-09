@@ -26,5 +26,10 @@ namespace WixDemoApp
         {
             MessageBox.Show("Hello World!");
         }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
