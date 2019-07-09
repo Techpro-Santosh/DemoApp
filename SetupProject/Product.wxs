@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define WixDemoApp_TargetDir=$(var.WixDemoApp.TargetDir)?>
+	<Product Id="*" Name="SetupProject" Language="1033" Version="1.0.0.0" Manufacturer="TP" UpgradeCode="15c0049d-df30-4a1a-9e67-c9a2ad26257e">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="SetupProject" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+      <!--<ComponentGroupRef Id="ApplicationShortcut" />
+      <ComponentGroupRef Id="ApplicationShortcutDesktop" />-->
+      <ComponentRef Id="ApplicationShortcut" />
+      <ComponentRef Id="ApplicationShortcutDesktop" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="SetupProject" />
+			</Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="SetupProject" />
+      </Directory>
+      <Directory Id="DesktopFolder" Name="SetupProject" />
+		</Directory>
+	</Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcut" Guid="8f7adca3-9d6b-4cfd-b867-c52ed416eb99">
+        <Shortcut Id="ApplicationStartMenuShortcut" Name="SetupProject" Description="SetupProject" Target="[INSTALLFOLDER]WixDemoApp.exe" WorkingDirectory="INSTALLFOLDER"></Shortcut>
+        <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\SetupProject" Name="Installed" Type="integer" Value="1" KeyPath="yes"></RegistryValue>
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="ApplicationShortcutDesktop" Guid="98ee3b8e-7d12-4b36-b953-1e0ee9d0676f">
+        <Shortcut Id="ApplicationDesktopShortcut" Name="SetupProject" Description="SetupProject" Target="[INSTALLFOLDER]WixDemoApp.exe" WorkingDirectory="INSTALLFOLDER"></Shortcut>
+        <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\SetupProject" Name="Installed" Type="integer" Value="1" KeyPath="yes"></RegistryValue>
+      </Component>
+    </DirectoryRef>
+    
+  </Fragment>
+  
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+			<!-- </Component> -->
+			<Component Id="WixDemoApp.exe" Guid="67f01067-69e3-42b9-bdde-fd1b60e87ae9">
+			  <File Id="WixDemoApp.exe" Name="WixDemoApp.exe" Source="$(var.WixDemoApp_TargetDir)WixDemoApp.exe" />
+			</Component>
+			<Component Id="WixDemoApp.exe.config" Guid="6e203bb8-93e5-4b12-a1a8-0dbdd59b63b5">
+			  <File Id="WixDemoApp.exe.config" Name="WixDemoApp.exe.config" Source="$(var.WixDemoApp_TargetDir)WixDemoApp.exe.config" />
+			</Component>
+			<Component Id="WixDemoApp.pdb" Guid="0053a201-ece5-475e-877f-64fb3ecaab72">
+			  <File Id="WixDemoApp.pdb" Name="WixDemoApp.pdb" Source="$(var.WixDemoApp_TargetDir)WixDemoApp.pdb" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
